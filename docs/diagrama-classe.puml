@@ -16,8 +16,31 @@ class Admin {
 }
 Usuario <|-- Admin
 
+interface IMedalha {
+    + addMedalha(tipo : EMedalha) : void
+    + medalhasTotais() : int
+    + medalhasTipo(tipo : EMedalha) : int
+}
+IMedalha <|.. Pais
+IMedalha <|.. Atleta
+
+class Pais {
+    - sigla : String
+    - atletas : List<Atleta>
+    - medalhasOuro : int
+    - medalhasPrata : int
+    - medalhasBronze : int
+    + Pais(..., nome : String, sigla : String)
+    + addAtleta(atleta : Atleta) : void
+    + removerAtleta(atleta : Atleta) : void
+    + addMedalha(tipo : EMedalha) : void
+    + medalhasTotais() : int
+    + medalhasTipo(tipo : EMedalha) : int
+}
+Usuario <|-- Pais
+
 class Atleta {
-    - nacionalidade : String
+    - pais : Pais
     - equipe : Equipe
     - genero : char
     - modalidades : List<Modalidade>
@@ -30,7 +53,10 @@ class Atleta {
     + inscreverCompeticao(competicao : Competicao) : void
     + consultarCompeticoes() : List<Competicao>
     + addMedalha(tipo : EMedalha) : void
+    + medalhasTotais() : int
+    + medalhasTipo(tipo : EMedalha) : int
     + podeParticipar(competicao : Competicao) : boolean
 }
 Usuario <|-- Atleta
+Pais "1" -- "*" Atleta : representa
 @enduml
