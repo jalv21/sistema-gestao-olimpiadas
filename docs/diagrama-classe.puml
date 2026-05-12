@@ -59,4 +59,15 @@ class Atleta {
 }
 Usuario <|-- Atleta
 Pais "1" -- "*" Atleta : representa
+
+class Modalidade <<record>>{
+    + nome : String
+    + descricao : String
+    + genero : char
+    + numAtletas : int
+    + duracaoHoras : float
+    + individual : boolean
+}
+Modalidade -- Admin
+Modalidade "*" -- "*" Atleta : participa
 @enduml
