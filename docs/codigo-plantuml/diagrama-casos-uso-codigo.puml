@@ -1,4 +1,4 @@
-@startuml
+@startuml diagrama-casos-uso
 actor Usuario
 actor Admin
 actor Tecnico
