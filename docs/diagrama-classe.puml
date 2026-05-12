@@ -1,0 +1,25 @@
+@startuml diagrama-classe
+abstract class Usuario {
+    # nome : String
+    # email : String
+    # senha : String
+    # Usuario(nome : String, email : String, senha : String)
+    # {abstract} login(email : String, senha : String) : boolean
+}
+class Atleta {
+    - nacionalidade : ENacionalidade
+    - equipe : Equipe
+    - genero : char
+    - historicoCompeticoes : List<Competicao>
+    - medalhasOuro : int
+    - medalhasPrata : int
+    - medalhasBronze : int
+    + Atleta(...)
+    + login(email : String, senha : String) : boolean
+    + inscreverCompeticao(competicao : Competicao) : void
+    + consultarCompeticoes() : List<Competicao>
+    + addMedalha(tipo : EMedalha) : void
+    + podeParticipar(competicao : Competicao) : boolean
+}
+Usuario <|-- Atleta
+@enduml
