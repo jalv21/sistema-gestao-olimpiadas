@@ -16,13 +16,13 @@ class Admin {
 }
 Usuario <|-- Admin
 
-interface IMedalha {
+interface Premiavel {
     + addMedalha(tipo : EMedalha) : void
     + medalhasTotais() : int
     + medalhasTipo(tipo : EMedalha) : int
 }
-IMedalha <|.. Pais
-IMedalha <|.. Atleta
+Premiavel <|.. Pais
+Premiavel <|.. Atleta
 
 class Pais {
     - sigla : String
@@ -36,6 +36,8 @@ class Pais {
     + addMedalha(tipo : EMedalha) : void
     + medalhasTotais() : int
     + medalhasTipo(tipo : EMedalha) : int
+    + listarAtletas() : List<Atleta>
+    + <T> filtrarAtletas(condicao : Predicate<T>) : List<Atleta>
 }
 Usuario <|-- Pais
 
@@ -43,6 +45,7 @@ class Atleta {
     - pais : Pais
     - equipe : Equipe
     - genero : char
+    - paralimpico : boolean
     - modalidades : List<Modalidade>
     - historicoCompeticoes : List<Competicao>
     - medalhasOuro : int
@@ -58,19 +61,21 @@ class Atleta {
     + podeParticipar(competicao : Competicao) : boolean
 }
 Usuario <|-- Atleta
-Pais "1" -- "*" Atleta : representa
+Pais "1" o-- "*" Atleta : representa
 
 class Modalidade <<record>>{
     + nome : String
     + descricao : String
+    + tipoOlimpiada : ETipoOlimpiada
     + genero : char
+    + paralimpica : boolean
     + numAtletas : int
     + duracaoMin : int
     + prorrogacaoMin : int
     + individual : boolean
 }
 Modalidade -- Admin
-Modalidade "*" -- "*" Atleta : participa
+Modalidade "*" -- "1..*" Atleta : pratica
 
 class Competicao {
     - nome : String
@@ -100,5 +105,25 @@ enum EMedalha {
     PRATA
     BRONZE
 }
-EMedalha -- IMedalha
+EMedalha -- Premiavel
+
+class Olimpiada {
+    - ano : int
+    - paises : List<Pais>
+    - competicoes : List<Competicao>
+    + Olimpiada(ano : int, tipo : ETipoOlimpiada)
+    + placarAtual() : Map<Pais, int>
+    + listarCompeticoes() : List<Competicao>
+    + <T> filtrarCompeticoes(condicao : Predicate<T>) : List<Competicao>
+}
+Olimpiada "1" -- "*" Pais : participa
+Olimpiada "1" *-- "*" Competicao : possui
+Olimpiada -- Admin : administra
+
+enum ETipoOlimpiada {
+    VERÃO
+    INVERNO
+}
+ETipoOlimpiada -- Modalidade
+
 @enduml
