@@ -77,6 +77,7 @@ class Competicao {
     - modalidade : Modalidade
     - dataHora : LocalDateTime
     - local : String
+    - tempoLimite : float
     - tempoDecorridoMin : float
     - emProrrogacao : boolean
     - finalizada : boolean
@@ -90,6 +91,14 @@ class Competicao {
     + prorrogar() : void
     + finalizar(resultado : Resultado) : void
 }
-Competicao -- Admin
+Competicao "*" --* "1" Modalidade
+Competicao "*" -- "1" Admin : cadastra
 Competicao "1..*" -- "*" Atleta : participa
+
+enum EMedalha {
+    OURO
+    PRATA
+    BRONZE
+}
+EMedalha -- IMedalha
 @enduml
