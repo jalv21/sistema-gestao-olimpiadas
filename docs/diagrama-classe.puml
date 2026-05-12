@@ -75,7 +75,14 @@ class Modalidade <<record>>{
     + individual : boolean
 }
 Modalidade -- Admin
-Modalidade "*" -- "1..*" Atleta : pratica
+Modalidade "*" o-- "1..*" Atleta : pratica
+
+interface Temporizavel {
+    + pausar() : void
+    + retomar() : void
+    + prorrogar() : void
+}
+Temporizavel <|.. Competicao
 
 class Competicao {
     - nome : String
@@ -95,6 +102,7 @@ class Competicao {
     + retomar() : void
     + prorrogar() : void
     + finalizar(resultado : Resultado) : void
+    + cancelar() : void
 }
 Competicao "*" --* "1" Modalidade
 Competicao "*" -- "1" Admin : cadastra
@@ -116,7 +124,7 @@ class Olimpiada {
     + listarCompeticoes() : List<Competicao>
     + <T> filtrarCompeticoes(condicao : Predicate<T>) : List<Competicao>
 }
-Olimpiada "1" -- "*" Pais : participa
+Olimpiada "1" *-- "*" Pais : participa
 Olimpiada "1" *-- "*" Competicao : possui
 Olimpiada -- Admin : administra
 
