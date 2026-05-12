@@ -1,0 +1,41 @@
+@startuml
+actor Admin
+actor Tecnico
+actor Atleta
+
+usecase "Cadastra Modalidade" as CADASTRA_MODALIDADE
+usecase "Cadastra Competição" as CADASTRA_COMPETICAO
+usecase "Registra Resultado" as REGRISTRA_RESULTADO
+usecase "Entrega Medalha" as ENTREGA_MEDALHA
+
+Admin --> CADASTRA_MODALIDADE
+Admin --> CADASTRA_COMPETICAO
+Admin --> REGRISTRA_RESULTADO
+REGRISTRA_RESULTADO --> (ENTREGA_MEDALHA) : <<include>>
+
+usecase "Faz Cadastro" as FAZ_CADASTRO
+usecase "Faz Login" as FAZ_LOGIN
+
+Atleta --|> Usuario
+Tecnico --|> Usuario
+
+Usuario --> FAZ_LOGIN
+FAZ_LOGIN --> (FAZ_CADASTRO) : <<extends>>
+
+usecase "Cadastra Equipe do País" as CADASTRA_EQUIPE
+usecase "Remove Atleta" as REMOVE_ATLETA
+usecase "Confirma Atleta" as CONFIRMA_ATLETA
+
+Tecnico --> CADASTRA_EQUIPE
+CADASTRA_EQUIPE --> (REMOVE_ATLETA) : <<extends>>
+CADASTRA_EQUIPE --> (CONFIRMA_ATLETA) : <<extends>>
+
+usecase "Seleciona Equipe do País" as SELECIONA_EQUIPE
+usecase "Inscreve-se em Competições" as INSCREVE_COMPETICOES
+usecase "Recebe Medalha" as RECEBE_MEDALHA
+
+Atleta --> INSCREVE_COMPETICOES
+INSCREVE_COMPETICOES --> (SELECIONA_EQUIPE) : <<include>>
+INSCREVE_COMPETICOES --> (RECEBE_MEDALHA) : <<extends>>
+
+
