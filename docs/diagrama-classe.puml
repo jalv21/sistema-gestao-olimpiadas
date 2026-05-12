@@ -65,9 +65,31 @@ class Modalidade <<record>>{
     + descricao : String
     + genero : char
     + numAtletas : int
-    + duracaoHoras : float
+    + duracaoMin : int
+    + prorrogacaoMin : int
     + individual : boolean
 }
 Modalidade -- Admin
 Modalidade "*" -- "*" Atleta : participa
+
+class Competicao {
+    - nome : String
+    - modalidade : Modalidade
+    - dataHora : LocalDateTime
+    - local : String
+    - tempoDecorridoMin : float
+    - emProrrogacao : boolean
+    - finalizada : boolean
+    - resultado : Resultado
+    - atletas : List<Atleta>
+    + Competicao(...)
+    + addAtleta(atleta : Atleta) : void
+    + removerAtleta(atleta : Atleta) : void
+    + pausar() : void
+    + retomar() : void
+    + prorrogar() : void
+    + finalizar(resultado : Resultado) : void
+}
+Competicao -- Admin
+Competicao "1..*" -- "*" Atleta : participa
 @enduml
