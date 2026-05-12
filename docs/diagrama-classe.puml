@@ -6,10 +6,21 @@ abstract class Usuario {
     # Usuario(nome : String, email : String, senha : String)
     # {abstract} login(email : String, senha : String) : boolean
 }
+
+class Admin {
+    + Admin(nome : String, email : String, senha : String)
+    + login(email : String, senha : String) : boolean
+    + cadastrarModalidade(modalidade : Modalidade) : void
+    + cadastrarCompeticao(competicao : Competicao) : void
+    + cancelarCompeticao(competicao : Competicao) : void
+}
+Usuario <|-- Admin
+
 class Atleta {
-    - nacionalidade : ENacionalidade
+    - nacionalidade : String
     - equipe : Equipe
     - genero : char
+    - modalidades : List<Modalidade>
     - historicoCompeticoes : List<Competicao>
     - medalhasOuro : int
     - medalhasPrata : int
