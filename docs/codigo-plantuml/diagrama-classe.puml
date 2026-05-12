@@ -1,0 +1,137 @@
+@startuml diagrama-classe
+abstract class Usuario {
+    # nome : String
+    # email : String
+    # senha : String
+    # Usuario(nome : String, email : String, senha : String)
+    # {abstract} login(email : String, senha : String) : boolean
+}
+
+class Admin {
+    + Admin(nome : String, email : String, senha : String)
+    + login(email : String, senha : String) : boolean
+    + cadastrarModalidade(modalidade : Modalidade) : void
+    + cadastrarCompeticao(competicao : Competicao) : void
+    + cancelarCompeticao(competicao : Competicao) : void
+}
+Usuario <|-- Admin
+
+interface Premiavel {
+    + addMedalha(tipo : EMedalha) : void
+    + medalhasTotais() : int
+    + medalhasTipo(tipo : EMedalha) : int
+}
+Premiavel <|.. Pais
+Premiavel <|.. Atleta
+
+class Pais {
+    - sigla : String
+    - atletas : List<Atleta>
+    - medalhasOuro : int
+    - medalhasPrata : int
+    - medalhasBronze : int
+    + Pais(..., nome : String, sigla : String)
+    + addAtleta(atleta : Atleta) : void
+    + removerAtleta(atleta : Atleta) : void
+    + addMedalha(tipo : EMedalha) : void
+    + medalhasTotais() : int
+    + medalhasTipo(tipo : EMedalha) : int
+    + listarAtletas() : List<Atleta>
+    + <T> filtrarAtletas(condicao : Predicate<T>) : List<Atleta>
+}
+Usuario <|-- Pais
+
+class Atleta {
+    - pais : Pais
+    - equipe : Equipe
+    - genero : char
+    - paralimpico : boolean
+    - modalidades : List<Modalidade>
+    - historicoCompeticoes : List<Competicao>
+    - medalhasOuro : int
+    - medalhasPrata : int
+    - medalhasBronze : int
+    + Atleta(...)
+    + login(email : String, senha : String) : boolean
+    + inscreverCompeticao(competicao : Competicao) : void
+    + consultarCompeticoes() : List<Competicao>
+    + addMedalha(tipo : EMedalha) : void
+    + medalhasTotais() : int
+    + medalhasTipo(tipo : EMedalha) : int
+    + podeParticipar(competicao : Competicao) : boolean
+}
+Usuario <|-- Atleta
+Pais "1" o-- "*" Atleta : representa
+
+class Modalidade <<record>>{
+    + nome : String
+    + descricao : String
+    + tipoOlimpiada : ETipoOlimpiada
+    + genero : char
+    + paralimpica : boolean
+    + numAtletas : int
+    + duracaoMin : int
+    + prorrogacaoMin : int
+    + individual : boolean
+}
+Modalidade -- Admin
+Modalidade "*" o-- "1..*" Atleta : pratica
+
+interface Temporizavel {
+    + pausar() : void
+    + retomar() : void
+    + prorrogar() : void
+}
+Temporizavel <|.. Competicao
+
+class Competicao {
+    - nome : String
+    - modalidade : Modalidade
+    - dataHora : LocalDateTime
+    - local : String
+    - tempoLimite : float
+    - tempoDecorridoMin : float
+    - emProrrogacao : boolean
+    - finalizada : boolean
+    - resultado : Resultado
+    - atletas : List<Atleta>
+    + Competicao(...)
+    + addAtleta(atleta : Atleta) : void
+    + removerAtleta(atleta : Atleta) : void
+    + pausar() : void
+    + retomar() : void
+    + prorrogar() : void
+    + finalizar(resultado : Resultado) : void
+    + cancelar() : void
+}
+Competicao "*" --* "1" Modalidade
+Competicao "*" -- "1" Admin : cadastra
+Competicao "1..*" -- "*" Atleta : participa
+
+enum EMedalha {
+    OURO
+    PRATA
+    BRONZE
+}
+EMedalha -- Premiavel
+
+class Olimpiada {
+    - ano : int
+    - paises : List<Pais>
+    - competicoes : List<Competicao>
+    + Olimpiada(ano : int, tipo : ETipoOlimpiada)
+    + placarAtual() : Map<Pais, int>
+    + listarCompeticoes() : List<Competicao>
+    + <T> filtrarCompeticoes(condicao : Predicate<T>) : List<Competicao>
+}
+Olimpiada "1" *-- "*" Pais : participa
+Olimpiada "1" *-- "*" Competicao : possui
+Olimpiada -- Admin : administra
+
+enum ETipoOlimpiada {
+    VERÃO
+    INVERNO
+}
+ETipoOlimpiada -- Modalidade
+
+@enduml
