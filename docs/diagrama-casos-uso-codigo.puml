@@ -1,4 +1,5 @@
 @startuml
+actor Usuario
 actor Admin
 actor Tecnico
 actor Atleta
@@ -7,15 +8,20 @@ usecase "Cadastra Modalidade" as CADASTRA_MODALIDADE
 usecase "Cadastra Competição" as CADASTRA_COMPETICAO
 usecase "Registra Resultado" as REGRISTRA_RESULTADO
 usecase "Entrega Medalha" as ENTREGA_MEDALHA
+usecase "Cria Classificação" as CRIA_CLASSIFICACAO
+usecase "Cancela Competição" as CANCELA_COMPETICAO
 
 Admin --> CADASTRA_MODALIDADE
 Admin --> CADASTRA_COMPETICAO
-Admin --> REGRISTRA_RESULTADO
-REGRISTRA_RESULTADO --> (ENTREGA_MEDALHA) : <<include>>
+CADASTRA_COMPETICAO --> (REGRISTRA_RESULTADO) : <<extends>>
+CADASTRA_COMPETICAO --> (CANCELA_COMPETICAO) : <<extends>>
+REGRISTRA_RESULTADO --> (CRIA_CLASSIFICACAO) : <<include>>
+CRIA_CLASSIFICACAO --> (ENTREGA_MEDALHA) : <<include>>
 
 usecase "Faz Cadastro" as FAZ_CADASTRO
 usecase "Faz Login" as FAZ_LOGIN
 
+Admin --|> Usuario
 Atleta --|> Usuario
 Tecnico --|> Usuario
 
@@ -37,5 +43,4 @@ usecase "Recebe Medalha" as RECEBE_MEDALHA
 Atleta --> INSCREVE_COMPETICOES
 INSCREVE_COMPETICOES --> (SELECIONA_EQUIPE) : <<include>>
 INSCREVE_COMPETICOES --> (RECEBE_MEDALHA) : <<extends>>
-
-
+@enduml
