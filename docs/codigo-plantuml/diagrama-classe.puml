@@ -11,13 +11,52 @@ abstract class Usuario {
     # Usuario(nome : String, email : String, senha : String)
 }
 
+interface CRUDService<T> {
+    + criar(entidade : T) : T
+    + listar() : List<T>
+    + filtrar(condicao : Predicate<T>) : List<T>
+    + atualizar(entidade : T) : T
+    + deletar(id : int) : void
+}
+
+class OlimpiadaService {
+    + OlimpiadaService()
+    + criarOlimpiada(ano : int) : Olimpiada
+    + listarOlimpiadas() : List<Olimpiada>
+    + filtrarOlimpiadas(condicao : Predicate<Olimpiada>) : List<Olimpiada>
+    + removerOlimpiada(olimpiada : Olimpiada) : void
+}
+OlimpiadaService ..|> CRUDService
+OlimpiadaService --> Olimpiada
+
+class ModalidadeService {
+    + ModalidadeService()
+    + criarModalidade(...) : Modalidade
+    + listarModalidades() : List<Modalidade>
+    + filtrarModalidades(condicao : Predicate<Modalidade>) : List<Modalidade>
+    + removerModalidade(modalidade : Modalidade) : void
+}
+ModalidadeService ..|> CRUDService
+ModalidadeService --> Modalidade
+
+class CompeticaoService {
+    + CompeticaoService()
+    + criarCompeticao(...) : Competicao
+    + listarCompeticoes() : List<Competicao>
+    + filtrarCompeticoes(condicao : Predicate<Competicao>) : List<Competicao>
+    + removerCompeticao(competicao : Competicao) : void
+}
+CompeticaoService ..|> CRUDService
+CompeticaoService --> Competicao
+
 class Admin {
-    + Admin(nome : String, email : String, senha : String)
-    + cadastrarModalidade(modalidade : Modalidade) : void
-    + cadastrarCompeticao(competicao : Competicao) : void
-    + cancelarCompeticao(competicao : Competicao) : void
+    - olimpiadaService : CRUDService
+    - modalidadeService : CRUDService
+    - competicaoService : CRUDService   
+    + Admin(...)
 }
 Usuario <|-- Admin
+CRUDService "1" *-- "1" Admin
 
 class MarcadorMedalhas {
     - medalhasOuro : int
@@ -86,18 +125,6 @@ class InscricaoService {
 InscricaoService --> Competicao
 InscricaoService --> Atleta
 
-class CadastroService {
-    - admin : Admin
-    + CadastroService(admin : Admin)
-    + cadastrarOlimpiada(olimpiada : Olimpiada) : void
-    + cadastrarModalidade(modalidade : Modalidade) : void
-    + cadastrarCompeticao(competicao : Competicao) : void
-}
-CadastroService "1" *-- "1" Admin
-CadastroService --> Modalidade
-CadastroService --> Competicao
-CadastroService --> Olimpiada
-
 class GerenciadorTempo {
     - tempoLimiteMin : float
     - decorridoMin : float
@@ -156,6 +183,7 @@ class Olimpiada {
     + listarCompeticoes() : List<Competicao>
     + <T> filtrarCompeticoes(condicao : Predicate<T>) : List<Competicao>
 }
+Olimpiada "1" *-- "*" Competicao : inclui
 
 enum ETipoOlimpiada {
     VERÃO
