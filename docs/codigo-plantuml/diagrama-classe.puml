@@ -39,6 +39,16 @@ class ModalidadeService {
 ModalidadeService ..|> CRUDService
 ModalidadeService --> Modalidade
 
+class LocalService {
+    + LocalService()
+    + criarLocal(...) : Local
+    + listarLocais() : List<Local>
+    + filtrarLocais(condicao : Predicate<Local>) : List<Local>
+    + removerLocal(local : Local) : void
+}
+LocalService ..|> CRUDService
+LocalService --> Local
+
 class CompeticaoService {
     + CompeticaoService()
     + criarCompeticao(...) : Competicao
@@ -52,6 +62,7 @@ CompeticaoService --> Competicao
 class Admin {
     - olimpiadaService : CRUDService
     - modalidadeService : CRUDService
+    - localService : CRUDService
     - competicaoService : CRUDService   
     + Admin(...)
 }
@@ -88,7 +99,7 @@ class Pais {
     + addAtleta(atleta : Atleta) : void
     + removerAtleta(atleta : Atleta) : void
     + listarAtletas() : List<Atleta>
-    + <T> filtrarAtletas(condicao : Predicate<T>) : List<Atleta>
+    + filtrarAtletas(condicao : Predicate<Atleta>) : List<Atleta>
     + medalhasTipo(tipo : EMedalha) : int
     + addMedalha(tipo : EMedalha) : void
     + removerMedalha(tipo : EMedalha) : void
@@ -149,7 +160,7 @@ class Competicao {
     - nome : String
     - modalidade : Modalidade
     - dataHora : LocalDateTime
-    - local : String
+    - alocadorLocal : AlocadorLocal
     - atletas : List<Atleta>
     - gerenciadorTempo : GerenciadorTempo
     - resultado : Resultado
@@ -165,6 +176,24 @@ class Competicao {
 }
 Competicao "*" --* "1" GerenciadorTempo
 Competicao "*" --* "1" Modalidade
+
+class Local {
+    - nome : String
+    - endereco : String
+    - modalidadesSuportadas : List<Modalidade>
+    + Local(...)
+    + disponivel(dataHora : LocalDateTime) : boolean
+    + reservar(competicao : Competicao) : void
+}
+Local "1..*" o-- "*" Modalidade : suporta
+
+class AlocadorLocal {
+    - local : Local
+    + AlocadorLocal(...)
+    + alocar(competicao : Competicao) : void
+}
+AlocadorLocal --> Local
+AlocadorLocal "1" *-- "1" Competicao
 
 class Resultado {
     - placar : Map<Atleta, Integer>
@@ -187,10 +216,10 @@ class Olimpiada {
     - ano : int
     - paises : List<Pais>
     - competicoes : List<Competicao>
-    + Olimpiada(ano : int, tipo : ETipoOlimpiada)
+    + Olimpiada(ano : int)
     + placarAtual() : Map<Pais, int>
     + listarCompeticoes() : List<Competicao>
-    + <T> filtrarCompeticoes(condicao : Predicate<T>) : List<Competicao>
+    + filtrarCompeticoes(condicao : Predicate<Competicao>) : List<Competicao>
 }
 Olimpiada "1" *-- "*" Competicao : inclui
 
