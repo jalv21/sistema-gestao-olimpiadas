@@ -67,8 +67,19 @@ class MarcadorMedalhas {
     + addMedalha(tipo : EMedalha) : void
     + removerMedalha(tipo : EMedalha) : void
 }
-MarcadorMedalhas "1" *-- "1" Pais
-MarcadorMedalhas "1" *-- "1" Atleta
+
+abstract class UsuarioOlimpico {
+    # marcadorMedalhas : MarcadorMedalhas
+    # UsuarioOlimpico(...)
+    # {abstract} addMedalha(tipo : EMedalha) : void
+    # {abstract} medalhasTotais() : int
+    # {abstract} medalhasTipo(tipo : EMedalha) : int
+    # {abstract} removerMedalha(tipo : EMedalha) : void
+}
+UsuarioOlimpico --|> Usuario
+UsuarioOlimpico "1" *-- "1" MarcadorMedalhas
+Pais --|> UsuarioOlimpico
+Atleta --|> UsuarioOlimpico
 
 class Pais {
     - sigla : String
@@ -82,7 +93,6 @@ class Pais {
     + addMedalha(tipo : EMedalha) : void
     + removerMedalha(tipo : EMedalha) : void
 }
-Usuario <|-- Pais
 Olimpiada "1" *-- "*" Pais : participa
 
 class Atleta {
@@ -101,7 +111,6 @@ class Atleta {
     + addMedalha(tipo : EMedalha) : void
     + removerMedalha(tipo : EMedalha) : void
 }
-Usuario <|-- Atleta
 Pais "1" o-- "*" Atleta : representa
 
 class Modalidade <<record>>{
