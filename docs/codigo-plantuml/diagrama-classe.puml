@@ -93,10 +93,9 @@ class Competicao {
     - modalidade : Modalidade
     - dataHora : LocalDateTime
     - local : String
-    - gerenciadorTempo : GerenciadorTempo
-    - finalizada : boolean
-    - resultado : Resultado
     - atletas : List<Atleta>
+    - gerenciadorTempo : GerenciadorTempo
+    - resultado : Resultado
     + Competicao(...)
     + addAtleta(atleta : Atleta) : void
     + removerAtleta(atleta : Atleta) : void
@@ -105,18 +104,30 @@ class Competicao {
     + prorrogar() : void
     + finalizar() : void
     + cancelar() : void
+    + resultado() : Resultado
 }
 Competicao "*" --* "1" GerenciadorTempo
 Competicao "*" --* "1" Modalidade
 Competicao "*" -- "1" Admin : cadastra
 Competicao "1..*" -- "*" Atleta : participa
 
+class Resultado {
+    - placar : Map<Atleta, Integer>
+    - vencedor : Map<Atleta, Integer>
+    + Resultado(placar : Map<Atleta, Integer>)
+    + getPodio() : Map<Atleta, Integer>
+    + getVencedor() : Map<Atleta, Integer>
+    + getColocacao(colocacao : int) : Map<Atleta, Integer>
+}
+Resultado "1" *-- "1" Competicao
+Resultado "*" *-- "*" Atleta
+
 enum EMedalha {
     OURO
     PRATA
     BRONZE
 }
-EMedalha -- Premiavel
+EMedalha -- MarcadorMedalhas
 
 class Olimpiada {
     - ano : int
