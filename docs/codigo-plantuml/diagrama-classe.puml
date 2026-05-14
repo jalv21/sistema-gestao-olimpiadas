@@ -1,66 +1,127 @@
 @startuml diagrama-classe
+interface AutenticacaoService {
+    + login() : void
+}
+AutenticacaoService <|.. Usuario
+
 abstract class Usuario {
     # nome : String
     # email : String
     # senha : String
     # Usuario(nome : String, email : String, senha : String)
-    # {abstract} login(email : String, senha : String) : boolean
 }
+
+interface CRUDService<T> {
+    + criar(entidade : T) : T
+    + listar() : List<T>
+    + filtrar(condicao : Predicate<T>) : List<T>
+    + atualizar(entidade : T) : T
+    + deletar(id : int) : void
+}
+
+class OlimpiadaService {
+    + OlimpiadaService()
+    + criarOlimpiada(ano : int) : Olimpiada
+    + listarOlimpiadas() : List<Olimpiada>
+    + filtrarOlimpiadas(condicao : Predicate<Olimpiada>) : List<Olimpiada>
+    + removerOlimpiada(olimpiada : Olimpiada) : void
+}
+OlimpiadaService ..|> CRUDService
+OlimpiadaService --> Olimpiada
+
+class ModalidadeService {
+    + ModalidadeService()
+    + criarModalidade(...) : Modalidade
+    + listarModalidades() : List<Modalidade>
+    + filtrarModalidades(condicao : Predicate<Modalidade>) : List<Modalidade>
+    + removerModalidade(modalidade : Modalidade) : void
+}
+ModalidadeService ..|> CRUDService
+ModalidadeService --> Modalidade
+
+class LocalService {
+    + LocalService()
+    + criarLocal(...) : Local
+    + listarLocais() : List<Local>
+    + filtrarLocais(condicao : Predicate<Local>) : List<Local>
+    + removerLocal(local : Local) : void
+}
+LocalService ..|> CRUDService
+LocalService --> Local
+
+class CompeticaoService {
+    + CompeticaoService()
+    + criarCompeticao(...) : Competicao
+    + listarCompeticoes() : List<Competicao>
+    + filtrarCompeticoes(condicao : Predicate<Competicao>) : List<Competicao>
+    + removerCompeticao(competicao : Competicao) : void
+}
+CompeticaoService ..|> CRUDService
+CompeticaoService --> Competicao
 
 class Admin {
-    + Admin(nome : String, email : String, senha : String)
-    + login(email : String, senha : String) : boolean
-    + cadastrarModalidade(modalidade : Modalidade) : void
-    + cadastrarCompeticao(competicao : Competicao) : void
-    + cancelarCompeticao(competicao : Competicao) : void
+    - olimpiadaService : CRUDService
+    - modalidadeService : CRUDService
+    - localService : CRUDService
+    - competicaoService : CRUDService   
+    + Admin(...)
 }
 Usuario <|-- Admin
+CRUDService "1" *-- "1" Admin
 
-interface Premiavel {
-    + addMedalha(tipo : EMedalha) : void
+class MarcadorMedalhas {
+    - medalhasOuro : int
+    - medalhasPrata : int
+    - medalhasBronze : int
     + medalhasTotais() : int
     + medalhasTipo(tipo : EMedalha) : int
+    + addMedalha(tipo : EMedalha) : void
+    + removerMedalha(tipo : EMedalha) : void
 }
-Premiavel <|.. Pais
-Premiavel <|.. Atleta
+
+abstract class UsuarioOlimpico {
+    # marcadorMedalhas : MarcadorMedalhas
+    # UsuarioOlimpico(...)
+    # {abstract} addMedalha(tipo : EMedalha) : void
+    # {abstract} medalhasTotais() : int
+    # {abstract} medalhasTipo(tipo : EMedalha) : int
+    # {abstract} removerMedalha(tipo : EMedalha) : void
+}
+UsuarioOlimpico --|> Usuario
+UsuarioOlimpico "1" *-- "1" MarcadorMedalhas
+Pais --|> UsuarioOlimpico
+Atleta --|> UsuarioOlimpico
 
 class Pais {
     - sigla : String
     - atletas : List<Atleta>
-    - medalhasOuro : int
-    - medalhasPrata : int
-    - medalhasBronze : int
     + Pais(..., nome : String, sigla : String)
     + addAtleta(atleta : Atleta) : void
     + removerAtleta(atleta : Atleta) : void
-    + addMedalha(tipo : EMedalha) : void
-    + medalhasTotais() : int
-    + medalhasTipo(tipo : EMedalha) : int
     + listarAtletas() : List<Atleta>
-    + <T> filtrarAtletas(condicao : Predicate<T>) : List<Atleta>
+    + filtrarAtletas(condicao : Predicate<Atleta>) : List<Atleta>
+    + medalhasTipo(tipo : EMedalha) : int
+    + addMedalha(tipo : EMedalha) : void
+    + removerMedalha(tipo : EMedalha) : void
 }
-Usuario <|-- Pais
+Olimpiada "1" *-- "*" Pais : participa
 
 class Atleta {
     - pais : Pais
     - equipe : Equipe
     - genero : char
-    - paralimpico : boolean
+    - InscricaoService : InscricaoService
     - modalidades : List<Modalidade>
     - historicoCompeticoes : List<Competicao>
-    - medalhasOuro : int
-    - medalhasPrata : int
-    - medalhasBronze : int
     + Atleta(...)
-    + login(email : String, senha : String) : boolean
-    + inscreverCompeticao(competicao : Competicao) : void
+    + inscreverCompeticao() : void
     + consultarCompeticoes() : List<Competicao>
     + addMedalha(tipo : EMedalha) : void
     + medalhasTotais() : int
     + medalhasTipo(tipo : EMedalha) : int
-    + podeParticipar(competicao : Competicao) : boolean
+    + addMedalha(tipo : EMedalha) : void
+    + removerMedalha(tipo : EMedalha) : void
 }
-Usuario <|-- Atleta
 Pais "1" o-- "*" Atleta : representa
 
 class Modalidade <<record>>{
@@ -68,65 +129,99 @@ class Modalidade <<record>>{
     + descricao : String
     + tipoOlimpiada : ETipoOlimpiada
     + genero : char
-    + paralimpica : boolean
     + numAtletas : int
     + duracaoMin : int
     + prorrogacaoMin : int
     + individual : boolean
 }
-Modalidade -- Admin
 Modalidade "*" o-- "1..*" Atleta : pratica
 
-interface Temporizavel {
+class InscricaoService {
+    - atleta : Atleta
+    + InscricaoService(...)
+    + podeInscrever(competicao : Competicao) : boolean
+    + inscrever(competicao : Competicao) : void
+}
+InscricaoService --> Competicao
+InscricaoService --> Atleta
+
+class GerenciadorTempo {
+    - tempoLimiteMin : float
+    - decorridoMin : float
+    - emProrrogacao : boolean
+    - finalizado : boolean
+    + GerenciadorTempo(...)
     + pausar() : void
     + retomar() : void
-    + prorrogar() : void
+    + prorrogar(tempoExtraMin : float)
 }
-Temporizavel <|.. Competicao
 
 class Competicao {
     - nome : String
     - modalidade : Modalidade
     - dataHora : LocalDateTime
-    - local : String
-    - tempoLimite : float
-    - tempoDecorridoMin : float
-    - emProrrogacao : boolean
-    - finalizada : boolean
-    - resultado : Resultado
+    - alocadorLocal : AlocadorLocal
     - atletas : List<Atleta>
+    - gerenciadorTempo : GerenciadorTempo
+    - resultado : Resultado
     + Competicao(...)
     + addAtleta(atleta : Atleta) : void
     + removerAtleta(atleta : Atleta) : void
     + pausar() : void
     + retomar() : void
     + prorrogar() : void
-    + finalizar(resultado : Resultado) : void
+    + finalizar() : void
     + cancelar() : void
+    + resultado() : Resultado
 }
+Competicao "*" --* "1" GerenciadorTempo
 Competicao "*" --* "1" Modalidade
-Competicao "*" -- "1" Admin : cadastra
-Competicao "1..*" -- "*" Atleta : participa
+
+class Local {
+    - nome : String
+    - endereco : String
+    - modalidadesSuportadas : List<Modalidade>
+    + Local(...)
+    + disponivel(dataHora : LocalDateTime) : boolean
+    + reservar(competicao : Competicao) : void
+}
+Local "1..*" o-- "*" Modalidade : suporta
+
+class AlocadorLocal {
+    - local : Local
+    + AlocadorLocal(...)
+    + alocar(competicao : Competicao) : void
+}
+AlocadorLocal --> Local
+AlocadorLocal "1" *-- "1" Competicao
+
+class Resultado {
+    - placar : Map<Atleta, Integer>
+    - vencedor : Map<Atleta, Integer>
+    + Resultado(placar : Map<Atleta, Integer>)
+    + getPodio() : Map<Atleta, Integer>
+    + getVencedor() : Map<Atleta, Integer>
+    + getColocacao(colocacao : int) : Map<Atleta, Integer>
+}
+Resultado "1" *-- "1" Competicao
 
 enum EMedalha {
     OURO
     PRATA
     BRONZE
 }
-EMedalha -- Premiavel
+EMedalha -- MarcadorMedalhas
 
 class Olimpiada {
     - ano : int
     - paises : List<Pais>
     - competicoes : List<Competicao>
-    + Olimpiada(ano : int, tipo : ETipoOlimpiada)
+    + Olimpiada(ano : int)
     + placarAtual() : Map<Pais, int>
     + listarCompeticoes() : List<Competicao>
-    + <T> filtrarCompeticoes(condicao : Predicate<T>) : List<Competicao>
+    + filtrarCompeticoes(condicao : Predicate<Competicao>) : List<Competicao>
 }
-Olimpiada "1" *-- "*" Pais : participa
-Olimpiada "1" *-- "*" Competicao : possui
-Olimpiada -- Admin : administra
+Olimpiada "1" *-- "*" Competicao : inclui
 
 enum ETipoOlimpiada {
     VERÃO
