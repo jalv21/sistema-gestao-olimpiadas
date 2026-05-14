@@ -1,15 +1,18 @@
 @startuml diagrama-classe
+interface Autenticacao {
+    + login()
+}
+Autenticacao <|.. Usuario
+
 abstract class Usuario {
     # nome : String
     # email : String
     # senha : String
     # Usuario(nome : String, email : String, senha : String)
-    # {abstract} login(email : String, senha : String) : boolean
 }
 
 class Admin {
     + Admin(nome : String, email : String, senha : String)
-    + login(email : String, senha : String) : boolean
     + cadastrarModalidade(modalidade : Modalidade) : void
     + cadastrarCompeticao(competicao : Competicao) : void
     + cancelarCompeticao(competicao : Competicao) : void
@@ -52,7 +55,6 @@ class Atleta {
     - medalhasPrata : int
     - medalhasBronze : int
     + Atleta(...)
-    + login(email : String, senha : String) : boolean
     + inscreverCompeticao(competicao : Competicao) : void
     + consultarCompeticoes() : List<Competicao>
     + addMedalha(tipo : EMedalha) : void
