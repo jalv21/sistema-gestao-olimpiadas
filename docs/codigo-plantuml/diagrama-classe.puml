@@ -79,21 +79,23 @@ class Modalidade <<record>>{
 Modalidade -- Admin
 Modalidade "*" o-- "1..*" Atleta : pratica
 
-interface Temporizavel {
+class GerenciadorTempo {
+    - tempoLimiteMin : float
+    - decorridoMin : float
+    - emProrrogacao : boolean
+    - finalizado : boolean
+    + GerenciadorTempo(...)
     + pausar() : void
     + retomar() : void
-    + prorrogar() : void
+    + prorrogar(tempoExtraMin : float)
 }
-Temporizavel <|.. Competicao
 
 class Competicao {
     - nome : String
     - modalidade : Modalidade
     - dataHora : LocalDateTime
     - local : String
-    - tempoLimite : float
-    - tempoDecorridoMin : float
-    - emProrrogacao : boolean
+    - gerenciadorTempo : GerenciadorTempo
     - finalizada : boolean
     - resultado : Resultado
     - atletas : List<Atleta>
@@ -103,9 +105,10 @@ class Competicao {
     + pausar() : void
     + retomar() : void
     + prorrogar() : void
-    + finalizar(resultado : Resultado) : void
+    + finalizar() : void
     + cancelar() : void
 }
+Competicao "*" --* "1" GerenciadorTempo
 Competicao "*" --* "1" Modalidade
 Competicao "*" -- "1" Admin : cadastra
 Competicao "1..*" -- "*" Atleta : participa
