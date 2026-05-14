@@ -19,28 +19,29 @@ class Admin {
 }
 Usuario <|-- Admin
 
-interface Premiavel {
-    + addMedalha(tipo : EMedalha) : void
+class MarcadorMedalhas {
+    - medalhasOuro : int
+    - medalhasPrata : int
+    - medalhasBronze : int
     + medalhasTotais() : int
     + medalhasTipo(tipo : EMedalha) : int
+    + addMedalha(tipo : EMedalha) : void
+    + removerMedalha(tipo : EMedalha) : void
 }
-Premiavel <|.. Pais
-Premiavel <|.. Atleta
+MarcadorMedalhas "1" *-- "1" Pais
+MarcadorMedalhas "1" *-- "1" Atleta
 
 class Pais {
     - sigla : String
     - atletas : List<Atleta>
-    - medalhasOuro : int
-    - medalhasPrata : int
-    - medalhasBronze : int
     + Pais(..., nome : String, sigla : String)
     + addAtleta(atleta : Atleta) : void
     + removerAtleta(atleta : Atleta) : void
-    + addMedalha(tipo : EMedalha) : void
-    + medalhasTotais() : int
-    + medalhasTipo(tipo : EMedalha) : int
     + listarAtletas() : List<Atleta>
     + <T> filtrarAtletas(condicao : Predicate<T>) : List<Atleta>
+    + medalhasTipo(tipo : EMedalha) : int
+    + addMedalha(tipo : EMedalha) : void
+    + removerMedalha(tipo : EMedalha) : void
 }
 Usuario <|-- Pais
 
@@ -48,18 +49,16 @@ class Atleta {
     - pais : Pais
     - equipe : Equipe
     - genero : char
-    - paralimpico : boolean
     - modalidades : List<Modalidade>
     - historicoCompeticoes : List<Competicao>
-    - medalhasOuro : int
-    - medalhasPrata : int
-    - medalhasBronze : int
     + Atleta(...)
     + inscreverCompeticao(competicao : Competicao) : void
     + consultarCompeticoes() : List<Competicao>
     + addMedalha(tipo : EMedalha) : void
     + medalhasTotais() : int
     + medalhasTipo(tipo : EMedalha) : int
+    + addMedalha(tipo : EMedalha) : void
+    + removerMedalha(tipo : EMedalha) : void
     + podeParticipar(competicao : Competicao) : boolean
 }
 Usuario <|-- Atleta
@@ -70,7 +69,6 @@ class Modalidade <<record>>{
     + descricao : String
     + tipoOlimpiada : ETipoOlimpiada
     + genero : char
-    + paralimpica : boolean
     + numAtletas : int
     + duracaoMin : int
     + prorrogacaoMin : int
