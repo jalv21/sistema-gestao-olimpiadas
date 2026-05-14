@@ -44,6 +44,7 @@ class Pais {
     + removerMedalha(tipo : EMedalha) : void
 }
 Usuario <|-- Pais
+Olimpiada "1" *-- "*" Pais : participa
 
 class Atleta {
     - pais : Pais
@@ -74,18 +75,28 @@ class Modalidade <<record>>{
     + prorrogacaoMin : int
     + individual : boolean
 }
-Modalidade -- Admin
 Modalidade "*" o-- "1..*" Atleta : pratica
 
 class InscricaoService {
-    - competicao : Competicao
     - atleta : Atleta
     + InscricaoService(...)
-    + podeInscrever() : boolean
-    + inscrever() : void
+    + podeInscrever(competicao : Competicao) : boolean
+    + inscrever(competicao : Competicao) : void
 }
-InscricaoService -- Competicao
-InscricaoService -- Atleta
+InscricaoService --> Competicao
+InscricaoService --> Atleta
+
+class CadastroService {
+    - admin : Admin
+    + CadastroService(admin : Admin)
+    + cadastrarOlimpiada(olimpiada : Olimpiada) : void
+    + cadastrarModalidade(modalidade : Modalidade) : void
+    + cadastrarCompeticao(competicao : Competicao) : void
+}
+CadastroService "1" *-- "1" Admin
+CadastroService --> Modalidade
+CadastroService --> Competicao
+CadastroService --> Olimpiada
 
 class GerenciadorTempo {
     - tempoLimiteMin : float
@@ -118,7 +129,6 @@ class Competicao {
 }
 Competicao "*" --* "1" GerenciadorTempo
 Competicao "*" --* "1" Modalidade
-Competicao "*" -- "1" Admin : cadastra
 
 class Resultado {
     - placar : Map<Atleta, Integer>
@@ -129,7 +139,6 @@ class Resultado {
     + getColocacao(colocacao : int) : Map<Atleta, Integer>
 }
 Resultado "1" *-- "1" Competicao
-Resultado "*" *-- "*" Atleta
 
 enum EMedalha {
     OURO
@@ -147,9 +156,6 @@ class Olimpiada {
     + listarCompeticoes() : List<Competicao>
     + <T> filtrarCompeticoes(condicao : Predicate<T>) : List<Competicao>
 }
-Olimpiada "1" *-- "*" Pais : participa
-Olimpiada "1" *-- "*" Competicao : possui
-Olimpiada -- Admin : administra
 
 enum ETipoOlimpiada {
     VERÃO
