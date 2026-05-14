@@ -1,8 +1,8 @@
 @startuml diagrama-classe
-interface Autenticacao {
-    + login()
+interface AutenticacaoService {
+    + login() : void
 }
-Autenticacao <|.. Usuario
+AutenticacaoService <|.. Usuario
 
 abstract class Usuario {
     # nome : String
@@ -49,17 +49,17 @@ class Atleta {
     - pais : Pais
     - equipe : Equipe
     - genero : char
+    - InscricaoService : InscricaoService
     - modalidades : List<Modalidade>
     - historicoCompeticoes : List<Competicao>
     + Atleta(...)
-    + inscreverCompeticao(competicao : Competicao) : void
+    + inscreverCompeticao() : void
     + consultarCompeticoes() : List<Competicao>
     + addMedalha(tipo : EMedalha) : void
     + medalhasTotais() : int
     + medalhasTipo(tipo : EMedalha) : int
     + addMedalha(tipo : EMedalha) : void
     + removerMedalha(tipo : EMedalha) : void
-    + podeParticipar(competicao : Competicao) : boolean
 }
 Usuario <|-- Atleta
 Pais "1" o-- "*" Atleta : representa
@@ -76,6 +76,16 @@ class Modalidade <<record>>{
 }
 Modalidade -- Admin
 Modalidade "*" o-- "1..*" Atleta : pratica
+
+class InscricaoService {
+    - competicao : Competicao
+    - atleta : Atleta
+    + InscricaoService(...)
+    + podeInscrever() : boolean
+    + inscrever() : void
+}
+InscricaoService -- Competicao
+InscricaoService -- Atleta
 
 class GerenciadorTempo {
     - tempoLimiteMin : float
@@ -109,7 +119,6 @@ class Competicao {
 Competicao "*" --* "1" GerenciadorTempo
 Competicao "*" --* "1" Modalidade
 Competicao "*" -- "1" Admin : cadastra
-Competicao "1..*" -- "*" Atleta : participa
 
 class Resultado {
     - placar : Map<Atleta, Integer>
