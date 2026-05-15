@@ -1,8 +1,4 @@
 @startuml diagrama-classe
-interface AutenticacaoService {
-    + login() : void
-}
-AutenticacaoService <|.. Usuario
 
 abstract class Usuario {
     # nome : String
@@ -11,63 +7,11 @@ abstract class Usuario {
     # Usuario(nome : String, email : String, senha : String)
 }
 
-interface CRUDService<T> {
-    + criar(entidade : T) : T
-    + listar() : List<T>
-    + filtrar(condicao : Predicate<T>) : List<T>
-    + atualizar(entidade : T) : T
-    + deletar(id : int) : void
-}
-
-class OlimpiadaService {
-    + OlimpiadaService()
-    + criarOlimpiada(ano : int) : Olimpiada
-    + listarOlimpiadas() : List<Olimpiada>
-    + filtrarOlimpiadas(condicao : Predicate<Olimpiada>) : List<Olimpiada>
-    + removerOlimpiada(olimpiada : Olimpiada) : void
-}
-OlimpiadaService ..|> CRUDService
-OlimpiadaService --> Olimpiada
-
-class ModalidadeService {
-    + ModalidadeService()
-    + criarModalidade(...) : Modalidade
-    + listarModalidades() : List<Modalidade>
-    + filtrarModalidades(condicao : Predicate<Modalidade>) : List<Modalidade>
-    + removerModalidade(modalidade : Modalidade) : void
-}
-ModalidadeService ..|> CRUDService
-ModalidadeService --> Modalidade
-
-class LocalService {
-    + LocalService()
-    + criarLocal(...) : Local
-    + listarLocais() : List<Local>
-    + filtrarLocais(condicao : Predicate<Local>) : List<Local>
-    + removerLocal(local : Local) : void
-}
-LocalService ..|> CRUDService
-LocalService --> Local
-
-class CompeticaoService {
-    + CompeticaoService()
-    + criarCompeticao(...) : Competicao
-    + listarCompeticoes() : List<Competicao>
-    + filtrarCompeticoes(condicao : Predicate<Competicao>) : List<Competicao>
-    + removerCompeticao(competicao : Competicao) : void
-}
-CompeticaoService ..|> CRUDService
-CompeticaoService --> Competicao
-
 class Admin {
-    - olimpiadaService : CRUDService
-    - modalidadeService : CRUDService
-    - localService : CRUDService
-    - competicaoService : CRUDService   
     + Admin(...)
+    + cadastrarOlimpiada() : void
 }
 Usuario <|-- Admin
-CRUDService "1" *-- "1" Admin
 
 class MarcadorMedalhas {
     - medalhasOuro : int
@@ -94,7 +38,6 @@ Atleta --|> UsuarioOlimpico
 
 class Pais {
     - sigla : String
-    - atletas : List<Atleta>
     + Pais(..., nome : String, sigla : String)
     + addAtleta(atleta : Atleta) : void
     + removerAtleta(atleta : Atleta) : void
@@ -110,7 +53,6 @@ class Atleta {
     - pais : Pais
     - equipe : Equipe
     - genero : char
-    - InscricaoService : InscricaoService
     - modalidades : List<Modalidade>
     - historicoCompeticoes : List<Competicao>
     + Atleta(...)
@@ -121,6 +63,8 @@ class Atleta {
     + medalhasTipo(tipo : EMedalha) : int
     + addMedalha(tipo : EMedalha) : void
     + removerMedalha(tipo : EMedalha) : void
+    + inscreverCompeticao(competicao : Competicao) : void
+    + cancelarInscricao(competicao : Competicao) : void
 }
 Pais "1" o-- "*" Atleta : representa
 
@@ -135,15 +79,6 @@ class Modalidade <<record>>{
     + individual : boolean
 }
 Modalidade "*" o-- "1..*" Atleta : pratica
-
-class InscricaoService {
-    - atleta : Atleta
-    + InscricaoService(...)
-    + podeInscrever(competicao : Competicao) : boolean
-    + inscrever(competicao : Competicao) : void
-}
-InscricaoService --> Competicao
-InscricaoService --> Atleta
 
 class GerenciadorTempo {
     - tempoLimiteMin : float
@@ -180,7 +115,6 @@ Competicao "*" --* "1" Modalidade
 class Local {
     - nome : String
     - endereco : String
-    - modalidadesSuportadas : List<Modalidade>
     + Local(...)
     + disponivel(dataHora : LocalDateTime) : boolean
     + reservar(competicao : Competicao) : void
@@ -220,8 +154,10 @@ class Olimpiada {
     + placarAtual() : Map<Pais, int>
     + listarCompeticoes() : List<Competicao>
     + filtrarCompeticoes(condicao : Predicate<Competicao>) : List<Competicao>
+    + placar() : Map<Pais, Integer>
 }
 Olimpiada "1" *-- "*" Competicao : inclui
+Olimpiada "*" --* "1" Admin : organiza
 
 enum ETipoOlimpiada {
     VERÃO
