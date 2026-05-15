@@ -11,63 +11,10 @@ abstract class Usuario {
     # Usuario(nome : String, email : String, senha : String)
 }
 
-interface CRUDService<T> {
-    + criar(entidade : T) : T
-    + listar() : List<T>
-    + filtrar(condicao : Predicate<T>) : List<T>
-    + atualizar(entidade : T) : T
-    + deletar(id : int) : void
-}
-
-class OlimpiadaService {
-    + OlimpiadaService()
-    + criarOlimpiada(ano : int) : Olimpiada
-    + listarOlimpiadas() : List<Olimpiada>
-    + filtrarOlimpiadas(condicao : Predicate<Olimpiada>) : List<Olimpiada>
-    + removerOlimpiada(olimpiada : Olimpiada) : void
-}
-OlimpiadaService ..|> CRUDService
-OlimpiadaService --> Olimpiada
-
-class ModalidadeService {
-    + ModalidadeService()
-    + criarModalidade(...) : Modalidade
-    + listarModalidades() : List<Modalidade>
-    + filtrarModalidades(condicao : Predicate<Modalidade>) : List<Modalidade>
-    + removerModalidade(modalidade : Modalidade) : void
-}
-ModalidadeService ..|> CRUDService
-ModalidadeService --> Modalidade
-
-class LocalService {
-    + LocalService()
-    + criarLocal(...) : Local
-    + listarLocais() : List<Local>
-    + filtrarLocais(condicao : Predicate<Local>) : List<Local>
-    + removerLocal(local : Local) : void
-}
-LocalService ..|> CRUDService
-LocalService --> Local
-
-class CompeticaoService {
-    + CompeticaoService()
-    + criarCompeticao(...) : Competicao
-    + listarCompeticoes() : List<Competicao>
-    + filtrarCompeticoes(condicao : Predicate<Competicao>) : List<Competicao>
-    + removerCompeticao(competicao : Competicao) : void
-}
-CompeticaoService ..|> CRUDService
-CompeticaoService --> Competicao
-
 class Admin {
-    - olimpiadaService : CRUDService
-    - modalidadeService : CRUDService
-    - localService : CRUDService
-    - competicaoService : CRUDService   
     + Admin(...)
 }
 Usuario <|-- Admin
-CRUDService "1" *-- "1" Admin
 
 class MarcadorMedalhas {
     - medalhasOuro : int
@@ -135,15 +82,6 @@ class Modalidade <<record>>{
     + individual : boolean
 }
 Modalidade "*" o-- "1..*" Atleta : pratica
-
-class InscricaoService {
-    - atleta : Atleta
-    + InscricaoService(...)
-    + podeInscrever(competicao : Competicao) : boolean
-    + inscrever(competicao : Competicao) : void
-}
-InscricaoService --> Competicao
-InscricaoService --> Atleta
 
 class GerenciadorTempo {
     - tempoLimiteMin : float
