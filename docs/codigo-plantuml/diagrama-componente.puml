@@ -1,0 +1,109 @@
+@startuml diagrama-componente
+component Navegador
+component "API REST Layer" as APIRest
+
+interface "HTTP" as HTTP_nav
+interface "HTTP" as HTTP_admin
+interface "HTTP" as HTTP_atleta
+interface "HTTP" as HTTP_pais
+
+Navegador -down-( HTTP_nav
+APIRest -up-() HTTP_nav
+
+interface "REST" as REST_olimpiadas
+interface "REST" as REST_competicoes
+interface "REST" as REST_resultados
+interface "REST" as REST_locais
+interface "REST" as REST_modalidades
+interface "REST" as REST_medalhas
+component "API Gateway (Auth. Admin)" as APIGatewayAdmin
+
+APIRest -down-( HTTP_admin
+APIGatewayAdmin -up-() HTTP_admin
+
+component olimpiadas
+APIGatewayAdmin -down-( REST_olimpiadas
+olimpiadas -up-() REST_olimpiadas
+
+component competicoes
+APIGatewayAdmin -down-( REST_competicoes
+competicoes -up-() REST_competicoes
+
+component resultados
+APIGatewayAdmin -down-( REST_resultados
+resultados -up-() REST_resultados
+
+component locais
+APIGatewayAdmin -down-( REST_locais
+locais -up-() REST_locais
+
+component modalidades
+APIGatewayAdmin -down-( REST_modalidades
+modalidades -up-() REST_modalidades
+
+component medalhas
+APIGatewayAdmin -down-( REST_medalhas
+medalhas -up-() REST_medalhas
+
+interface "REST" as REST_inscricoes
+component "API Gateway (Auth. Atleta)" as APIGatewayAtleta
+component "API Gateway (Auth. País)" as APIGatewayPais
+
+APIRest -down-( HTTP_atleta
+APIGatewayAtleta -up-() HTTP_atleta
+
+component inscricoes
+APIGatewayAtleta -down-( REST_inscricoes
+inscricoes -up-() REST_inscricoes
+
+interface "REST" as REST_atletas
+component "gerenciamento de atletas" as atletas
+APIGatewayPais -down-( REST_atletas
+atletas -up-() REST_atletas
+
+APIRest -down-( HTTP_pais
+APIGatewayPais -up-() HTTP_pais
+
+interface "TCP/IP" as TCPIP_bd_atletas
+interface "TCP/IP" as TCPIP_bd_inscricoes
+interface "TCP/IP" as TCPIP_bd_medalhas
+interface "TCP/IP" as TCPIP_bd_modalidades
+interface "TCP/IP" as TCPIP_bd_locais
+interface "TCP/IP" as TCPIP_bd_resultados
+interface "TCP/IP" as TCPIP_bd_competicoes
+interface "TCP/IP" as TCPIP_bd_olimpiadas
+
+component "SQL Server" as SQLServerAtletas
+component "SQL Server" as SQLServerInscricoes
+component "SQL Server" as SQLServerMedalhas
+component "SQL Server" as SQLServerModalidades
+component "SQL Server" as SQLServerLocais
+component "SQL Server" as SQLServerResultados
+component "SQL Server" as SQLServerCompeticoes
+component "SQL Server" as SQLServerOlimpiadas
+
+atletas -down-( TCPIP_bd_atletas
+SQLServerAtletas -up-() TCPIP_bd_atletas
+
+inscricoes -down-( TCPIP_bd_inscricoes
+SQLServerInscricoes -up-() TCPIP_bd_inscricoes
+
+medalhas -down-( TCPIP_bd_medalhas
+SQLServerMedalhas -up-() TCPIP_bd_medalhas
+
+modalidades -down-( TCPIP_bd_modalidades
+SQLServerModalidades -up-() TCPIP_bd_modalidades
+
+locais -down-( TCPIP_bd_locais
+SQLServerLocais -up-() TCPIP_bd_locais
+
+resultados -down-( TCPIP_bd_resultados
+SQLServerResultados -up-() TCPIP_bd_resultados
+
+competicoes -down-( TCPIP_bd_competicoes
+SQLServerCompeticoes -up-() TCPIP_bd_competicoes
+
+olimpiadas -down-( TCPIP_bd_olimpiadas
+SQLServerOlimpiadas -up-() TCPIP_bd_olimpiadas
+
+@enduml
