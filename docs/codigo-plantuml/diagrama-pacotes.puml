@@ -1,3 +1,53 @@
 @startuml diagrama-pacotes
-
+package "Apresentação/Acesso" <<Layer>> {
+    abstract class Usuario
+    class Admin
+    abstract class UsuarioOlimpico
+    class AutenticacaoService
+}
+package "Aplicação/Serviços" <<Layer>> {
+    class OlimpiadaService
+    class CompeticaoService
+    class ModalidadeService
+    class LocalService
+    class InscricaoService
+    class GerenciadorTempo
+}
+"Apresentação/Acesso" --> "Aplicação/Serviços" : usa
+package "Domínio/Entidades" <<Layer>> {
+    package "Entidades e Agregados" <<Subsystem>> {
+        class Olimpiada
+        class Resultado
+        class Competicao
+        class Atleta
+        class MarcadorMedalhas
+        class Pais
+        class Modalidade <<record>>
+        class Local
+    }
+    package "Contratos (Interfaces e Enums)" <<Subsystem>> {
+        interface CRUDService
+        enum EMedalha
+        enum ETipoOlimpiada
+    }
+}
+"Aplicação/Serviços" --> "Domínio/Entidades" : manipula
+package "Infraestrutura" <<Layer>> {
+    package "Persistencia" <<Subsystem>> {
+        interface OlimpiadaRepository
+        interface CompeticaoRepository
+        interface AtletaRepository
+        interface PaisRepository
+        interface ModalidadeRepository
+        interface LocalRepository
+    }
+    package "Clock" <<Subsystem>> {
+        class Clock
+        class GerenciadorTempoPadrao
+    }
+    package "Segurança" <<Subsystem>>{
+        class AutenticacaoServiceImpl
+    }
+}
+"Domínio/Entidades" --> "Infraestrutura" : depende
 @enduml
