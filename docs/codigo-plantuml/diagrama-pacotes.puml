@@ -31,7 +31,30 @@ package "Domínio/Entidades" <<Layer>> {
         enum ETipoOlimpiada
     }
 }
-"Aplicação/Serviços" --> "Domínio/Entidades" : manipula
+"Aplicação/Serviços" --> "DTO" : usa
+
+package "DTO" <<Layer>> {
+    package "Request" <<Subsystem>> {
+        class OlimpiadaRequestDTO
+        class CompeticaoRequestDTO
+        class AtletaRequestDTO
+        class PaisRequestDTO
+        class ModalidadeRequestDTO
+        class LocalRequestDTO
+        class ResultadoRequestDTO
+    }
+    package "Response" <<Subsystem>> {
+        class OlimpiadaResponseDTO
+        class CompeticaoResponseDTO
+        class AtletaResponseDTO
+        class PaisResponseDTO
+        class ModalidadeResponseDTO
+        class LocalResponseDTO
+        class ResultadoResponseDTO
+    }     
+}
+"DTO" --> "Domínio/Entidades" : converte
+
 package "Infraestrutura" <<Layer>> {
     package "Persistencia" <<Subsystem>> {
         interface OlimpiadaRepository
