@@ -1,8 +1,4 @@
 @startuml diagrama-classe
-interface AutenticacaoService {
-    + login() : void
-}
-AutenticacaoService <|.. Usuario
 
 abstract class Usuario {
     # nome : String
@@ -13,6 +9,7 @@ abstract class Usuario {
 
 class Admin {
     + Admin(...)
+    + cadastrarOlimpiada() : void
 }
 Usuario <|-- Admin
 
@@ -41,7 +38,6 @@ Atleta --|> UsuarioOlimpico
 
 class Pais {
     - sigla : String
-    - atletas : List<Atleta>
     + Pais(..., nome : String, sigla : String)
     + addAtleta(atleta : Atleta) : void
     + removerAtleta(atleta : Atleta) : void
@@ -57,7 +53,6 @@ class Atleta {
     - pais : Pais
     - equipe : Equipe
     - genero : char
-    - InscricaoService : InscricaoService
     - modalidades : List<Modalidade>
     - historicoCompeticoes : List<Competicao>
     + Atleta(...)
@@ -68,6 +63,8 @@ class Atleta {
     + medalhasTipo(tipo : EMedalha) : int
     + addMedalha(tipo : EMedalha) : void
     + removerMedalha(tipo : EMedalha) : void
+    + inscreverCompeticao(competicao : Competicao) : void
+    + cancelarInscricao(competicao : Competicao) : void
 }
 Pais "1" o-- "*" Atleta : representa
 
@@ -118,7 +115,6 @@ Competicao "*" --* "1" Modalidade
 class Local {
     - nome : String
     - endereco : String
-    - modalidadesSuportadas : List<Modalidade>
     + Local(...)
     + disponivel(dataHora : LocalDateTime) : boolean
     + reservar(competicao : Competicao) : void
@@ -158,8 +154,10 @@ class Olimpiada {
     + placarAtual() : Map<Pais, int>
     + listarCompeticoes() : List<Competicao>
     + filtrarCompeticoes(condicao : Predicate<Competicao>) : List<Competicao>
+    + placar() : Map<Pais, Integer>
 }
 Olimpiada "1" *-- "*" Competicao : inclui
+Olimpiada "*" --* "1" Admin : organiza
 
 enum ETipoOlimpiada {
     VERÃO
