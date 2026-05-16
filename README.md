@@ -123,16 +123,16 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sodales leo or
 
 ## Diagrama de Classes
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sodales leo orci, nec aliquam nisl semper quis. Nullam ultricies velit et ligula feugiat, eu condimentum sem varius. Donec laoreet, diam eu pretium accumsan, erat augue aliquam nisi, vitae facilisis sapien lacus a neque. Vestibulum blandit sem et massa rutrum, a fringilla leo imperdiet. 
+O Diagrama de classes modela os dados do sistema dividindo-os em módulos, cada um com seus atributos e métodos. Este é o Diagrama de Classes que representa o sistema projetado:
 
 ![Diagrama de Classes](./docs/SGO%20-%20Diagrama%20de%20Classes.png)
 
 ### Classes
-- `Classe1`:
-- `Classe2`:
-- `Classe3`:
-- `Classe5`:
-- `Classe6`:
+- `Usuario`: É uma classe abstrata, existe para abstrair a lógica compartilhada por todos os tipo de usuário no sistema, como os dados de email e senha para efetuar o cadastro e login.
+- `Admin`: Representa o usuário administrador único, que gerencia as olimpíadas. Ele é uma subclasse de `Usuario`
+- `UsuarioOlimpico`: Uma outra classe abstrata, que herda de `Usuario`. Representa um usuário que possui lógica diretamente relacionada às competições da olimpíada, tais como controle de medalhas e histórico de competições.
+- `Atleta`: Subclasse de `UsuarioOlimpico` que representa um atleta, que participa de competições representando um país.
+- `Pais`: Outra subclasse de `UsuarioOlimpico`, que representa a equipe de um país nas olimpíadas. Só pode existir uma equipe para cada país.
 
 ## Diagrama de Pacotes
 
@@ -160,19 +160,19 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sodales leo or
 Justificativa do porque escolhi essas tecnologias para esse node.
 
 #### Servidor da Aplicação - API Rest Layer
-- **Linguagem/Superset:** Go
+- **Linguagem:** Go
 - **Framework REST:** Gin
 
 Justificativa do porque escolhi essas tecnologias para esse node.
 
 #### Servidores de Gateway - API Gateway
-- **Linguagem/Superset**: Go
+- **Linguagem**: Go
 
 Justificativa do porque escolhi essas tecnologias para esse node.
 
 #### Cluster de Microsserviços
 ##### Microsserviços
-- **Linguagem/Superset**: Java 25 
+- **Linguagem**: Java 25 
 
 Justificativa do porque escolhi essas tecnologias para esse node.
 
