@@ -99,4 +99,82 @@ As equipes serão inseridas em uma página de classificação baseada na quantid
 
 ---
 
+## Diagrama de Casos de Uso
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sodales leo orci, nec aliquam nisl semper quis. Nullam ultricies velit et ligula feugiat, eu condimentum sem varius. Donec laoreet, diam eu pretium accumsan, erat augue aliquam nisi, vitae facilisis sapien lacus a neque. Vestibulum blandit sem et massa rutrum, a fringilla leo imperdiet. 
+
+![Diagrama de Casos de Uso](./docs/SGO%20-%20Diagrama%20de%20Casos%20de%20Uso.png)
+
+### 🧍 Atores
+- **Ator1**:
+- **Ator2**:
+- **Ator3**:
+
+### 🗨️ Casos de Uso
+- **UC01**:
+- **UC02**:
+- **UC03**:
+- **UC04**:
+- **UC05**:
+- **UC06**:
+- **UC07**:
+- **UC08**:
+
+
+## Diagrama de Classes
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sodales leo orci, nec aliquam nisl semper quis. Nullam ultricies velit et ligula feugiat, eu condimentum sem varius. Donec laoreet, diam eu pretium accumsan, erat augue aliquam nisi, vitae facilisis sapien lacus a neque. Vestibulum blandit sem et massa rutrum, a fringilla leo imperdiet. 
+
+![Diagrama de Classes](./docs/SGO%20-%20Diagrama%20de%20Classes.png)
+
+### Classes
+- `Classe1`:
+- `Classe2`:
+- `Classe3`:
+- `Classe5`:
+- `Classe6`:
+
+## Diagrama de Pacotes
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sodales leo orci, nec aliquam nisl semper quis. Nullam ultricies velit et ligula feugiat, eu condimentum sem varius. Donec laoreet, diam eu pretium accumsan, erat augue aliquam nisi, vitae facilisis sapien lacus a neque. Vestibulum blandit sem et massa rutrum, a fringilla leo imperdiet.
+
+![Diagrama de Pacotes](./docs/SGO%20-%20Diagrama%20de%20Pacotes.png)
+
+### Pacotes
+- 
+- 
+- 
+- 
+
+## Diagrama de Componentes e Implantação
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sodales leo orci, nec aliquam nisl semper quis. Nullam ultricies velit et ligula feugiat, eu condimentum sem varius. Donec laoreet, diam eu pretium accumsan, erat augue aliquam nisi, vitae facilisis sapien lacus a neque. Vestibulum blandit sem et massa rutrum, a fringilla leo imperdiet.
+
+![Diagrama de Componentes e Implantação](./docs/SGO%20-%20Diagrama%20de%20Componentes%20e%20Implantação.png)
+
+### 🛠️ Tecnologias Escolhidas
+#### Dispositivo do Usuário - Navegador - Front-End
+- **Linguagem/Superset:** TypeScript ES6+
+- **Framework Front-End:** Angular.js
+
+Justificativa do porque escolhi essas tecnologias para esse node.
+
+#### Servidor da Aplicação - API Rest Layer
+- **Linguagem/Superset:** Go
+- **Framework REST:** Gin
+
+Justificativa do porque escolhi essas tecnologias para esse node.
+
+#### Servidores de Gateway - API Gateway
+- **Linguagem/Superset**: Go
+
+Justificativa do porque escolhi essas tecnologias para esse node.
+
+#### Cluster de Microsserviços
+##### Microsserviços
+- **Linguagem/Superset**: Java 25 
+
+Justificativa do porque escolhi essas tecnologias para esse node.
+
+
 
